@@ -1,13 +1,18 @@
 {
-  "name": "module",
-  "title": "New Module",
+  "name": "foundry-pf1-initiative",
+  "title": "PF1 initiative",
   "description": "",
-  "version": "This is auto replaced",
+  "version": "0.0.1",
   "library": "false",
   "manifestPlusVersion": "1.0.0",
   "minimumCoreVersion": "0.7.9",
   "compatibleCoreVersion": "0.7.9",
   "authors": [
+    {
+      "name": "c7d5a6",
+      "url": "https://github.com/owlbeardm",
+      "discord": "Blackcloud010#5426"
+    },
     {
       "name": "Blackcloud",
       "url": "https://github.com/Blackcloud010",
@@ -41,9 +46,6 @@
       "path": "languages/en.json"
     }
   ],
-  "url": "This is auto replaced",
-  "manifest": "This is auto replaced",
-  "download": "This is auto replaced",
   "media": [
     {
       "type": "icon",
