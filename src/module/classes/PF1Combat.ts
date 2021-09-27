@@ -35,6 +35,59 @@ export default class PF1Combat extends Combat {
 
     }
 
+    async GetSElect() {
+        // const template = "templates/selectAction.hbs";
+        return new Promise(resolve => {
+            const content = `<form>  <div class="form-group">    <label>      <input type="radio" name="action" value="sw" />      Swift Action (1d4)    </label>  </div>  <div class="form-group">    <label>      <input type="radio" name="action" value="m" />      Move Action (1d6)    </label>  </div>  <div class="form-group">    <label>      <input type="radio" name="action" value="s" />      Standard Action (1d8)    </label>  </div>  <div class="form-group">    <label>      <input type="radio" name="action" value="sp" />      Casting Spell Action (1d10)    </label>  </div>  <div class="form-group">    <label>      <input type="radio" name="action" value="f" />      Full-round Action (1d8+1d6)    </label>  </div></form>`;
+            console.log(content);
+            const d = new Dialog({
+                title: "Test Dialog",
+                content: content,
+                buttons: {
+                    roll: {
+                        label: "Roll",
+                        callback: (html) => this.myCallback(html, false, resolve)
+                    },
+                    improved: {
+                        label: "Improved Inititative",
+                        callback: (html) => this.myCallback(html, true, resolve)
+                    }
+                },
+                default: "roll",
+                // render: () => console.log("Register interactivity in the rendered dialog"),
+                close: () => resolve("")
+            });
+            d.render(true);
+        });
+    }
+
+    myCallback(html, improved, resolve) {
+        const selectedAction = html.find('input[name="action"]:checked').val();
+        console.log("selected action", selectedAction)
+        let diceToRoll = "";
+        switch (selectedAction) {
+            case "sw":
+                diceToRoll += "1d4" + (improved ? "kh" : "");
+                break;
+            case "m":
+                diceToRoll += "1d6" + (improved ? "kh" : "");
+                break;
+            case "s":
+                diceToRoll += "1d8" + (improved ? "kh" : "");
+                break;
+            case "sp":
+                diceToRoll += "1d10" + (improved ? "kh" : "");
+                break;
+            case "f":
+                diceToRoll += improved ? "min(1d8+1d6,1d8+1d6)" : "1d8+1d6";
+                break;
+            default:
+                break;
+        }
+        console.log("value", diceToRoll);
+        resolve(diceToRoll);
+    }
+
     async rollAll(options) {
         if (!options) {
             options = {};
@@ -51,13 +104,14 @@ export default class PF1Combat extends Combat {
         return super.rollNPC(options);
     }
 
-    async rollInitiative(ids, options) {
+    async rollInitiative(ids, options) {        
         console.log("ids.length", ids.length)
         if (!options) {
             options = {};
         }
         options.formula = "1d8+1d6";
         if (ids.length == 1) {
+            options.formula = await this.GetSElect();
             options.formula = options.formula + "+" + this.getCombatant(ids[0]).initiative;
         }
         console.log("ids.length", ids.length)
